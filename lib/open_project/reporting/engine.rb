@@ -25,7 +25,7 @@ module OpenProject::Reporting
 
     register 'openproject-reporting',
              :author_url => 'http://finn.de',
-             :requires_openproject => '>= 3.0.0' do
+             :requires_openproject => '>= 4.0.0' do
 
     view_actions = [:index, :show, :drill_down, :available_values, :display_report_list]
     edit_actions = [:create, :update, :rename, :delete]
@@ -67,6 +67,13 @@ module OpenProject::Reporting
     initializer "reporting.register_hooks" do
       # don't use require_dependency to not reload hooks in development mode
       require 'open_project/reporting/hooks'
+    end
+
+    initializer 'reporting.precompile_assets' do
+      Rails.application.config.assets.precompile += %w(
+        reporting_engine/reporting_engine.css
+        reporting_engine/reporting_engine.js
+      )
     end
 
     config.to_prepare do
